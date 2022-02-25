@@ -1,26 +1,36 @@
-import React from 'react';
+import React, { Component } from 'react';
 import logo from './logo.svg';
-import './App.css';
+import { CardList } from './Components/CardList/CardList';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+interface appState {
+  monsters: any[]
+}
+
+class App extends Component<{},appState> {
+
+  constructor() {
+    super({});
+    this.state = {
+      monsters: []
+    }
+  }
+
+  componentDidMount() {
+    fetch('https://jsonplaceholder.typicode.com/users')
+    .then((response: any) => response.json())
+    .then((users: any) => this.setState({monsters: users}))
+  }
+
+  render() {
+    return (
+      <div className="bg-gradient-to-r from-green-500 to-indigo-500">
+        <div className='container mx-auto'>
+          <CardList monsters={this.state.monsters}></CardList>
+        </div>
+     </div>
+     
+    );
+  }
 }
 
 export default App;
