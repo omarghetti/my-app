@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import { CardList } from './Components/CardList/CardList';
+import { SearchBox } from './Components/SearchBox/SearchBox';
 
 interface appState {
   monsters: any[]
+  searchFilter: string
 }
 
 class App extends Component<{},appState> {
@@ -11,8 +13,15 @@ class App extends Component<{},appState> {
   constructor() {
     super({});
     this.state = {
-      monsters: []
+      monsters: [],
+      searchFilter: ""
     }
+
+    this.searchFilterHandler = this.searchFilterHandler.bind(this)
+  }
+
+  searchFilterHandler(searchFilter: string) {
+    this.setState({ searchFilter })
   }
 
   componentDidMount() {
@@ -22,13 +31,20 @@ class App extends Component<{},appState> {
   }
 
   render() {
+    const filteredMonsters = this.state.monsters.filter((element: any) => {
+      return element.name.toLocaleLowerCase().includes(this.state.searchFilter)
+    })
     return (
-      <div className="bg-gradient-to-r from-green-500 to-indigo-500">
-        <div className='container mx-auto'>
-          <CardList monsters={this.state.monsters}></CardList>
+      <>
+      <div className='object-fill bg-gradient-to-r from-green-500 to-indigo-500'>
+        <div className='container max-w-full'>
+          <div>
+            <SearchBox setSearchFilter={this.searchFilterHandler}></SearchBox>
+            <CardList monsters={filteredMonsters}></CardList>
+          </div>
         </div>
-     </div>
-     
+      </div>
+    </>
     );
   }
 }
